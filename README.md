@@ -1,4 +1,5 @@
-# Linear_Algebra_Enigma_Encrypter
+# Enigma_Encrypter
+## Enigma-like Encrypting Library Utilizing Linear Algebra
 
 Developers:
 
