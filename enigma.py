@@ -17,6 +17,7 @@ class Enigma:
         self.C = copy.deepcopy(self.P)
         random.shuffle(self.C)
 
+
     def to_one_hot(self, message):
         one_hot_message = np.empty((27, 0))
         for letter in message.lower():
@@ -30,6 +31,7 @@ class Enigma:
 
         one_hot_message = np.array(one_hot_message)
         return one_hot_message
+
 
     def to_string(self, one_hot_message):
         message = ""
@@ -45,8 +47,10 @@ class Enigma:
     def encrypt(self, message, P):
         pass
 
+
     def decrypt(self, message, P):
         pass
+
 
     def enigma(self, message, P, E):
         pass
