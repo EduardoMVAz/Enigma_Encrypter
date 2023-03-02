@@ -44,6 +44,7 @@ class Enigma:
 
 
     def encrypt(self, message, idx):
+        message = np.array([message]).T
         message = self.P @ message
 
         for _ in range(idx):
@@ -62,7 +63,7 @@ class Enigma:
         encrypted_message = np.empty((27, 0))
 
         for i in range(onehot.shape[1]):
-            np.concatenate((encrypted_message, self.encrypt(onehot[:,i], i)), axis=1)
+           encrypted_message = np.concatenate((encrypted_message, self.encrypt(onehot[:,i].T, i)), axis=1)
         
         return self.to_string(encrypted_message)
 
