@@ -84,12 +84,3 @@ class Enigma:
            decrypted_message = np.concatenate((decrypted_message, self.decrypt(onehot[:,i].T, i)), axis=1)
         
         return self.to_string(decrypted_message)
-
-
-
-e = Enigma(22)
-m = "o tiago eh legal"
-
-mc = e.enigma(m)
-print(mc)
-print(e.de_enigma(mc))
