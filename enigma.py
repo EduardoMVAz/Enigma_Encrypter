@@ -1,5 +1,4 @@
 import numpy as np
-import random
 import copy
 
 class Enigma:  
@@ -44,23 +43,27 @@ class Enigma:
         return message
 
 
-    def encrypt(self, message, P):
-        return P @ message
+    def encrypt(self, message, idx):
+        message = self.P @ message
+
+        for _ in range(idx):
+            message = self.E @ message
+
+        return message
 
 
-    def decrypt(self, message, P):
+    def decrypt(self, message, idx):
         return np.linalg.inv(P) @ message
 
 
     def enigma(self, message):
         onehot = self.to_one_hot(message)
 
-        encrypted_message = self.encrypt(onehot, self.P)
+        encrypted_message = np.empty((27, 0))
 
-        for _ in range(len(message[0])):
-            encrypted_message = self.encrypt(encrypted_message, self.E)
+        for i in range(onehot.shape[1]):
+            np.concatenate((encrypted_message, self.encrypt(onehot[:,i], i)), axis=1)
         
-        print(encrypted_message)
         return self.to_string(encrypted_message)
 
 
@@ -76,12 +79,8 @@ class Enigma:
 
 
 
-e = Enigma()
+e = Enigma(22)
 m = "o tiago eh legal"
-
-#print(e.P)
 
 mc = e.enigma(m)
 print(mc)
-
-print(e.de_enigma(mc))
