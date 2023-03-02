@@ -35,7 +35,11 @@ class Enigma:
         message = ""
 
         for col in one_hot_message.T:
-            pass
+            i = np.where(col == 1)[0][0]
+            
+            message += self.ALFABETO[i]
+        
+        return message
 
 
     def encrypt(self, message, P):
@@ -49,3 +53,8 @@ class Enigma:
 
     def de_enigma(self, message, P, E):
         pass
+
+
+e = Enigma()
+onehot = e.to_one_hot("piroca")
+print(e.to_string(onehot))
