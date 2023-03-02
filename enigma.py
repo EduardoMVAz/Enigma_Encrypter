@@ -54,7 +54,14 @@ class Enigma:
 
 
     def decrypt(self, message, idx):
-        return np.linalg.inv(P) @ message
+        message = np.array([message]).T
+
+        for _ in range(idx):
+            message = np.linalg.inv(self.E) @ message
+
+        message = np.linalg.inv(self.P) @ message
+
+        return message
 
 
     def enigma(self, message):
@@ -71,11 +78,11 @@ class Enigma:
     def de_enigma(self, message):
         onehot = self.to_one_hot(message)
 
-        for _ in range(len(message[0])):
-            onehot = self.decrypt(onehot, self.E)
-        
-        decrypted_message = self.decrypt(onehot, self.P)
+        decrypted_message = np.empty((27, 0))
 
+        for i in range(onehot.shape[1]):
+           decrypted_message = np.concatenate((decrypted_message, self.decrypt(onehot[:,i].T, i)), axis=1)
+        
         return self.to_string(decrypted_message)
 
 
@@ -85,3 +92,4 @@ m = "o tiago eh legal"
 
 mc = e.enigma(m)
 print(mc)
+print(e.de_enigma(mc))
