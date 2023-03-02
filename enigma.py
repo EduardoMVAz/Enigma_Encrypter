@@ -9,13 +9,13 @@ class Enigma:
     def __init__(self, seed=42):
         
         self._seed = seed
-        random.seed(seed)
+        np.random.seed(seed)
 
         self.P = np.eye(27)
-        random.shuffle(self.P)
+        np.random.shuffle(self.P)
 
-        self.C = copy.deepcopy(self.P)
-        random.shuffle(self.C)
+        self.E = copy.deepcopy(self.P)
+        np.random.shuffle(self.E)
 
 
     def to_one_hot(self, message):
@@ -45,20 +45,43 @@ class Enigma:
 
 
     def encrypt(self, message, P):
-        pass
+        return P @ message
 
 
     def decrypt(self, message, P):
-        pass
+        return np.linalg.inv(P) @ message
 
 
-    def enigma(self, message, P, E):
-        pass
+    def enigma(self, message):
+        onehot = self.to_one_hot(message)
 
-    def de_enigma(self, message, P, E):
-        pass
+        encrypted_message = self.encrypt(onehot, self.P)
+
+        for _ in range(len(message[0])):
+            encrypted_message = self.encrypt(encrypted_message, self.E)
+        
+        print(encrypted_message)
+        return self.to_string(encrypted_message)
+
+
+    def de_enigma(self, message):
+        onehot = self.to_one_hot(message)
+
+        for _ in range(len(message[0])):
+            onehot = self.decrypt(onehot, self.E)
+        
+        decrypted_message = self.decrypt(onehot, self.P)
+
+        return self.to_string(decrypted_message)
+
 
 
 e = Enigma()
-onehot = e.to_one_hot("piroca")
-print(e.to_string(onehot))
+m = "o tiago eh legal"
+
+#print(e.P)
+
+mc = e.enigma(m)
+print(mc)
+
+print(e.de_enigma(mc))
