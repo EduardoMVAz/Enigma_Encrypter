@@ -20,7 +20,7 @@ To utilize this python library, simply install it using pip as such:
 
 ## How to Use
 
-There is a jupyter nootebook named demo in this repository, with a brief demonstration of how u can utilize the functions of the library which are:
+There is a jupyter notebook named demo in this repository, with a brief demonstration of how u can utilize the functions of the library which are:
 
 * Encrypting a message, with the Enigma class.
 
@@ -40,12 +40,26 @@ The mathematical model for the Enigma library consists in utilizing matrix multi
 
 * Then, for each letter represented by the $V[27,1]$ vector, the encrypt function is called, which is used by the enigma function to shuffle the message.
 
-* Each letter in the message, including spaces, is multiplied by a matrix P, which is a permutated identity matrix, generated utilizing the seed given by the user or pre-selected. 
+* Multiplying a matrix m by an identity matrix results in m. Following this logic, multiplying a matrix by a permutated identity matrix results in a permutated m. 
 
-* After this, the letter is multiplied by another version of the P matrix, but shuffled once more, called E matrix. This is repeated a the number of times equal to the index (0 - size of the message) of the letter in the message. So, for example, the first letter V1 is multiplied only by P, P @ V1, for its index in the message is 0, and the seventh letter V7 is multiplied by P and 6 times by E, E @ E @ E @ E @ E @ E @ P @ V7, for its index in the message is 6.
+* For this reason, each letter in the message, including spaces, is multiplied by a matrix P, which is a permutated identity matrix, generated utilizing the seed given by the user or pre-selected. 
+
+* After this, the letter is multiplied by another version of the P matrix, but shuffled once more, called E matrix. The E matrix permutates the P matrix once again, so each letter has a completely different permutation process, making the cryptography way more efficient than just permutating the whole message in the same manner.
+
+* This is repeated a the number of times equal to the index (0 - size of the message) of the letter in the message. So, for example, the first letter V1 is multiplied only by P, P @ V1, for its index in the message is 0, and the seventh letter V7 is multiplied by P and 6 times by E, E @ E @ E @ E @ E @ E @ P @ V7, for its index in the message is 6.
 
 #### Decryption
 
 * The basis for decryption is utilizing the inverse of the permutation matrixes P and E, for when a matriz is multiplied by its inverse, it becomes an indentity matrix, which when multiplied by another matrix, results in this other matrix (same as multiplying a number by 1).
 
 * So the process is basically the same as encryption, but the letters are multiplied by the inverse of P, and then by the inverse of E, as many times as their index, returning to their original one hot configuration, and then translated back into text before being returned to user.
+
+$
+\begin{aligned}
+encrypted message = E @ P @ message \\
+E^{-1} @ encrypted message = E^{-1} @ E @ P @ message \\
+E^{-1} @ encrypted message = Identity @ P @ message = P @ message \\
+P^{-1} @ E^{-1} @ encrypted message = P^{-1} @ P @ message \\
+P^{-1} @ E^{-1} @ encrypted message = message
+\end{aligned}
+$
