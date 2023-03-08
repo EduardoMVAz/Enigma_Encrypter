@@ -54,7 +54,7 @@ The mathematical model for the Enigma library consists in utilizing matrix multi
 
 * So the process is basically the same as encryption, but the letters are multiplied by the inverse of P, and then by the inverse of E, as many times as their index, returning to their original one hot configuration, and then translated back into text before being returned to user.
 
-$
+$$
 \begin{aligned}
 encrypted message = E @ P @ message \\
 E^{-1} @ encrypted message = E^{-1} @ E @ P @ message \\
@@ -62,4 +62,4 @@ E^{-1} @ encrypted message = Identity @ P @ message = P @ message \\
 P^{-1} @ E^{-1} @ encrypted message = P^{-1} @ P @ message \\
 P^{-1} @ E^{-1} @ encrypted message = message
 \end{aligned}
-$
+$$
