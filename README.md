@@ -36,9 +36,9 @@ The mathematical model for the Enigma library consists in utilizing matrix multi
 
 #### Encryption
 
-* First, letters are transformed into one hot, so each letter is a vector $V\subscript{27,1}$, with zeros in all lines but the one representing its position in the order "abcdefghijklmnopqrstuvwxyz ", with a space at the end. So a complete message is a matrix with the concatanated vectors of each letter.
+* First, letters are transformed into one hot, so each letter is a vector $V[27,1]$, with zeros in all lines but the one representing its position in the order "abcdefghijklmnopqrstuvwxyz ", with a space at the end. So a complete message is a matrix with the concatanated vectors of each letter.
 
-* Then, for each letter represented by the $V\subscript{27,1}$ vector, the encrypt function is called, which is used by the enigma function to shuffle the message.
+* Then, for each letter represented by the $V[27,1]$ vector, the encrypt function is called, which is used by the enigma function to shuffle the message.
 
 * Each letter in the message, including spaces, is multiplied by a matrix P, which is a permutated identity matrix, generated utilizing the seed given by the user or pre-selected. 
 
