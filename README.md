@@ -36,14 +36,40 @@ The mathematical model for the Enigma library consists in utilizing matrix multi
 
 #### Encryption
 
-* First, letters are transformed into one hot, so each letter is a vector $V_{27,1}$, with zeros in all lines but the one representing its position in the order "abcdefghijklmnopqrstuvwxyz ", with a space at the end. So a complete message is a matrix with the concatanated vectors of each letter:
+* First, letters are transformed into one hot, so each letter is a vector $V_{27,1}$, with zeros in all lines but the one representing its position in the order "abcdefghijklmnopqrstuvwxyz ", with a space at the end. So a complete message is a matrix with the concatanated vectors of each letter: 
 
-** Letter A = [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-** Letter B = [0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+$$ 
+Letter A =
+\begin{bmatrix} 
+1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 
+\end{bmatrix}
+$$
+
+$$
+Letter B =
+\begin{bmatrix} 
+0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 
+\end{bmatrix} 
+$$
 
 * Then, for each letter represented by the $V_{27,1}$ vector, the encrypt function is called, which is used by the enigma function to shuffle the message.
 
-* Multiplying a matrix m by an identity matrix results in m. Following this logic, multiplying a matrix by a permutated identity matrix results in a permutated m. 
+* Multiplying a matrix m by an identity matrix results in m. Following this logic, multiplying a matrix by a permutated identity matrix results in a permutated m:
+
+$$
+\begin{bmatrix}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & 1
+\end{bmatrix}
+&#8594;
+\begin{bmatrix}
+0 & 0 & 1 \\
+1 & 0 & 0 \\
+0 & 1 & 0 
+\end{bmatrix}
+$$
+
 
 $$
 \begin{bmatrix}
@@ -55,8 +81,7 @@ $$
     1 &  1 & 0 & 0 & 0 & 0 \\
     0 &  0 & 1 & 1 & 0 & 0 \\
     0 &  0 & 0 & 0 & 1 & 1 
-\end{bmatrix}
-= 
+\end{bmatrix} =
 \begin{bmatrix}
     0 &  0 & 0 & 0 & 1 & 1 \\
     1 &  1 & 0 & 0 & 0 & 0 \\
@@ -66,9 +91,15 @@ $$
 
 * For this reason, each letter in the message, including spaces, is multiplied by a matrix P, which is a permutated identity matrix, generated utilizing the seed given by the user or pre-selected. 
 
-* After this, the letter is multiplied by another version of the P matrix, but shuffled once more, called E matrix. The E matrix permutates the P matrix once again, so each letter has a completely different permutation process, making the cryptography way more efficient than just permutating the whole message in the same manner.
+* After this, the letter is multiplied by another version of the P matrix, but shuffled once more, called E matrix. The E matrix permutates the P matrix once again, so each encrypted letter Lc has a completely different permutation process, making the cryptography way more efficient than just permutating the whole message in the same manner.
 
-* This is repeated a the number of times equal to the index (0 - size of the message) of the letter in the message. So, for example, the first letter V1 is multiplied only by P, P @ V1, for its index in the message is 0, and the seventh letter V7 is multiplied by P and 6 times by E, E @ E @ E @ E @ E @ E @ P @ V7, for its index in the message is 6.
+* This is repeated a the number of times equal to the index (0 - size of the message) of the letter in the message. So, for example, the first letter L1:
+
+     $Lc_1$ = $PL_1$
+
+* For the seventh letter $L_7$:
+
+    $Lc_7$ = $EEEEEEPL_7$
 
 #### Decryption
 
@@ -78,10 +109,10 @@ $$
 
 $$
 \begin{aligned}
-encryptedL2 = EPL2 \\
-E^{-1}encryptedL2 = E^{-1}EPencryptedL2 \\
-E^{-1}encryptedL2 = IdentityPencryptedL2 = PencryptedL2 \\
-P^{-1}E^{-1}encryptedL2 = P^{-1}PencryptedL2 \\
-P^{-1}E^{-1}encryptedL2 = encryptedL2
+Lc_2 = EPL_2 \\
+E^{-1}Lc_2 = E^{-1}EPL_2 \\
+E^{-1}Lc_2 = IPL_2 = PL_2 \\
+P^{-1}E^{-1}Lc_2 = P^{-1}PL_2 \\
+P^{-1}E^{-1}Lc_2 = L_2
 \end{aligned}
 $$
