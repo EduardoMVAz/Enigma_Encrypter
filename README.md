@@ -14,7 +14,7 @@ The Enigma library is a tool for encrypting messages, using the same system that
 
 To utilize this python library, simply install it using pip as such:
 
-* pip install https://github.com/EduardoMVAz/Enigma_Encrypter.git
+* pip install git+https://github.com/EduardoMVAz/Enigma_Encrypter.git
 
 ---
 
@@ -36,9 +36,9 @@ The mathematical model for the Enigma library consists in utilizing matrix multi
 
 #### Encryption
 
-* First, letters are transformed into one hot, so each letter is a vector $V[27,1]$, with zeros in all lines but the one representing its position in the order "abcdefghijklmnopqrstuvwxyz ", with a space at the end. So a complete message is a matrix with the concatanated vectors of each letter.
+* First, letters are transformed into one hot, so each letter is a vector $V_{27,1}$, with zeros in all lines but the one representing its position in the order "abcdefghijklmnopqrstuvwxyz ", with a space at the end. So a complete message is a matrix with the concatanated vectors of each letter.
 
-* Then, for each letter represented by the $V[27,1]$ vector, the encrypt function is called, which is used by the enigma function to shuffle the message.
+* Then, for each letter represented by the $V_{27,1}$ vector, the encrypt function is called, which is used by the enigma function to shuffle the message.
 
 * Multiplying a matrix m by an identity matrix results in m. Following this logic, multiplying a matrix by a permutated identity matrix results in a permutated m. 
 
@@ -56,10 +56,10 @@ The mathematical model for the Enigma library consists in utilizing matrix multi
 
 $$
 \begin{aligned}
-encrypted message = E @ P @ message \\
-E^{-1} @ encrypted message = E^{-1} @ E @ P @ message \\
-E^{-1} @ encrypted message = Identity @ P @ message = P @ message \\
-P^{-1} @ E^{-1} @ encrypted message = P^{-1} @ P @ message \\
-P^{-1} @ E^{-1} @ encrypted message = message
+encryptedL2 = EPL2 \\
+E^{-1}encryptedL2 = E^{-1}EPencryptedL2 \\
+E^{-1}encryptedL2 = IdentityPencryptedL2 = PencryptedL2 \\
+P^{-1}E^{-1}encryptedL2 = P^{-1}PencryptedL2 \\
+P^{-1}E^{-1}encryptedL2 = encryptedL2
 \end{aligned}
 $$
