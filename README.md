@@ -36,11 +36,33 @@ The mathematical model for the Enigma library consists in utilizing matrix multi
 
 #### Encryption
 
-* First, letters are transformed into one hot, so each letter is a vector $V_{27,1}$, with zeros in all lines but the one representing its position in the order "abcdefghijklmnopqrstuvwxyz ", with a space at the end. So a complete message is a matrix with the concatanated vectors of each letter.
+* First, letters are transformed into one hot, so each letter is a vector $V_{27,1}$, with zeros in all lines but the one representing its position in the order "abcdefghijklmnopqrstuvwxyz ", with a space at the end. So a complete message is a matrix with the concatanated vectors of each letter:
+
+** Letter A = [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+** Letter B = [0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 
 * Then, for each letter represented by the $V_{27,1}$ vector, the encrypt function is called, which is used by the enigma function to shuffle the message.
 
 * Multiplying a matrix m by an identity matrix results in m. Following this logic, multiplying a matrix by a permutated identity matrix results in a permutated m. 
+
+$$
+\begin{bmatrix}
+0 & 0 & 1 \\
+1 & 0 & 0 \\
+0 & 1 & 0 
+\end{bmatrix}
+\begin{bmatrix}
+    1 &  1 & 0 & 0 & 0 & 0 \\
+    0 &  0 & 1 & 1 & 0 & 0 \\
+    0 &  0 & 0 & 0 & 1 & 1 
+\end{bmatrix}
+= 
+\begin{bmatrix}
+    0 &  0 & 0 & 0 & 1 & 1 \\
+    1 &  1 & 0 & 0 & 0 & 0 \\
+    0 &  0 & 1 & 1 & 0 & 0 
+\end{bmatrix}
+$$
 
 * For this reason, each letter in the message, including spaces, is multiplied by a matrix P, which is a permutated identity matrix, generated utilizing the seed given by the user or pre-selected. 
 
