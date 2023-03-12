@@ -124,11 +124,11 @@ class Enigma:
 
         # Validation
         if len(message) == 0:
-            return "Encryption error: message cannot be empty. \n Reference alphabet: 'abcdefghijklmnopqrstuvwxyz '"
+            return "Encryption error: message cannot be empty. Reference alphabet: 'abcdefghijklmnopqrstuvwxyz '"
 
         for letter in message.lower():
             if letter not in self.ALFABETO:
-                return "Encryption error: message must contain only letters and spaces. No symbols or accents are allowed. \n Reference alphabet: 'abcdefghijklmnopqrstuvwxyz '"
+                return f"Encryption error: '{letter}' not accepted. Message must contain only letters and spaces. No symbols or accents are allowed. Reference alphabet: 'abcdefghijklmnopqrstuvwxyz '"
 
         onehot = self.to_one_hot(message)
 
@@ -152,11 +152,11 @@ class Enigma:
         '''
         # Validation
         if len(message) == 0:
-            return "Encryption error: message cannot be empty. \n Reference alphabet: 'abcdefghijklmnopqrstuvwxyz '"
+            return "Encryption error: message cannot be empty. Reference alphabet: 'abcdefghijklmnopqrstuvwxyz '"
 
         for letter in message.lower():
             if letter not in self.ALFABETO:
-                return "Encryption error: message must contain only letters and spaces. No symbols or accents are allowed. \n Reference alphabet: 'abcdefghijklmnopqrstuvwxyz '"
+                return f"Encryption error: '{letter}' not accepted. Message must contain only letters and spaces. No symbols or accents are allowed. Reference alphabet: 'abcdefghijklmnopqrstuvwxyz '"
             
         onehot = self.to_one_hot(message)
 
