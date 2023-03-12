@@ -10,23 +10,47 @@ The Enigma library is a tool for encrypting messages, using the same system that
 
 ---
 
-## How to install
+## How to Install
 
-To utilize this python library, simply install it using pip as such:
+To utilize this as a python library, simply install it using pip as such:
 
-* pip install git+https://github.com/EduardoMVAz/Enigma_Encrypter.git
+`pip install git+https://github.com/EduardoMVAz/Enigma_Encrypter.git`
+
+* After installation, simply import the Enigma from the encrypter module to start using it:
+
+`from encrypter.enigma import Enigma`
 
 ---
 
-## How to Use
+## How to Use the Encrypter with `demo.ipynb` (testing without pip)
 
 There is a jupyter notebook named demo in this repository, with a brief demonstration of how u can utilize the functions of the library which are:
 
 * Encrypting a message, with the Enigma class.
 
-* Utilizing a seed to determine your encryption. As shown in the mathematical model, our program utilizes a seed, that can be either chosen by the user or not (if not, the seed is always 42), to determine how the the matrixes are shuffled. That means that two instances of Enigma with the same seed will encrypt a message the same way, and are able to decrypt messages encrypted by the other instance.
+* Utilizing a seed to determine your encryption. As shown in the mathematical model, our program utilizes a seed, that can be either chosen by the user or not (if not, there is a default value of 42), to determine how the the matrixes are shuffled. That means that two instances of Enigma with the same seed will encrypt a message the same way, and are able to decrypt messages encrypted by the other instance.
 
 * Decrypting a message, also with the Enigma class. To decrypt correctly, the engima instance used to decrypt must have the same seed as the one used to encrypt.
+
+To test the Enigma encrypter without installing it as library, clone the repository and utilize the notebook with the following steps:
+
+1. Clone the repostitory on an empty folder:
+
+`git clone https://github.com/EduardoMVAz/Enigma_Encrypter.git`
+
+2. Change to the root directory of the project:
+
+`cd ./Enigma_Encrypter`
+
+3. Open the file `demo.ipynb` and run each cell in order to test the Enigma encrypter
+
+*OBS: besides the normal demonstration, there are also tests with **invalid messages and characters** to show all possibilites and responses.*
+
+---
+
+## How to Use the API
+
+This repository contains an API which can be run locally. For more information on how to use it and what to expect, please refer to the `README.md` file on the `api` folder.
 
 ---
 
@@ -36,7 +60,7 @@ The mathematical model for the Enigma library consists in utilizing matrix multi
 
 #### Encryption
 
-* First, letters are transformed into one hot, so each letter is a vector $V_{27,1}$, with zeros in all lines but the one representing its position in the order "abcdefghijklmnopqrstuvwxyz ", with a space at the end. So a complete message is a matrix with the concatanated vectors of each letter: 
+* First, letters are transformed into one hot, a vector $V_{27,1}$, with zeros in all rows but the one representing its position in the order "abcdefghijklmnopqrstuvwxyz " (with a space at the end). Therefore, a complete message is a matrix with the concatanated vectors of each letter: 
 
 $$ 
 Letter A =
@@ -52,9 +76,11 @@ Letter B =
 \end{bmatrix} 
 $$
 
-* Then, for each letter represented by the $V_{27,1}$ vector, the encrypt function is called, which is used by the enigma function to shuffle the message.
+obs: although represented as row vectors, the one hots are column vectores, as described.
 
-* Multiplying a matrix m by an identity matrix results in m. Following this logic, multiplying a matrix by a permutated identity matrix results in a permutated m:
+* Then, for each letter represented by the $V_{27,1}$ vector, the `encrypt` function is called, which is used by the enigma function to shuffle the message.
+
+* Multiplying a matrix $M$ by an identity matrix results in $M$ itself. Following this logic, multiplying a matrix by a permutated identity matrix results in a permutated $M$:
 
 $$
 \begin{bmatrix}
@@ -89,23 +115,27 @@ $$
 \end{bmatrix}
 $$
 
-* For this reason, each letter in the message, including spaces, is multiplied by a matrix P, which is a permutated identity matrix, generated utilizing the seed given by the user or pre-selected. 
+* In this way, the shuffling process of each letter, including spaces, is done by pre-multiplying it by a matrix $P$, which is a permutated identity matrix, generated utilizing the seed given by the user or pre-selected.
 
-* After this, the letter is multiplied by another version of the P matrix, but shuffled once more, called E matrix. The E matrix permutates the P matrix once again, so each encrypted letter Lc has a completely different permutation process, making the cryptography way more efficient than just permutating the whole message in the same manner.
+*OBS: because the permutation matriz is generated by the Enigma class, the accepted characters for the message cannot be changed. Any other characters that are not lower-case alphabet letters (no accents, such as "á", are allowed) or spaces result in the Enigma stopping and returning an error string describing the problem.*
 
-* This is repeated a the number of times equal to the index (0 - size of the message) of the letter in the message. So, for example, the first letter L1:
+* After this, the letter is multiplied by another version of the $P$ matrix, but shuffled once more, called $E$ matrix. The $E$ matrix permutates the $P$ matrix once again, so each encrypted letter $L_c$ has a completely different permutation process, making the cryptography way more efficient than just permutating the whole message in the same manner. This represents the crypt itself being encrypted for every character of the message.
+
+* This is repeated a the number of times equal to the index (0 - size of the message) of the letter in the message. So, for example, the first letter $L_1$:
 
      $Lc_1$ = $PL_1$
 
 * For the seventh letter $L_7$:
 
     $Lc_7$ = $EEEEEEPL_7$
+    
+* After the encryption of the letter, the new one hot is concatenated to the encrypted message matrix which, in the end, is transformed back to a string.
 
 #### Decryption
 
-* The basis for decryption is utilizing the inverse of the permutation matrixes P and E, for when a matriz is multiplied by its inverse, it becomes an indentity matrix, which when multiplied by another matrix, results in this other matrix (same as multiplying a number by 1).
+* The basis for decryption is utilizing the inverse of the permutation matrixes $P$ and $E$, for when a matriz is multiplied by its inverse, it becomes an indentity matrix, which when multiplied by another matrix, results in this other matrix (same as multiplying a number by 1).
 
-* So the process is basically the same as encryption, but the letters are multiplied by the inverse of P, and then by the inverse of E, as many times as their index, returning to their original one hot configuration, and then translated back into text before being returned to user.
+* Thus, the process is basically the same as encryption, but the encrypted letters are pre-multiplied by the inverse of $P$, and then by the inverse of $E$, as many times as their index, returning to their original one hot configuration, and then translated back into text before being returned to user.
 
 $$
 \begin{aligned}
@@ -113,6 +143,6 @@ Lc_2 = EPL_2 \\
 E^{-1}Lc_2 = E^{-1}EPL_2 \\
 E^{-1}Lc_2 = IPL_2 = PL_2 \\
 P^{-1}E^{-1}Lc_2 = P^{-1}PL_2 \\
-P^{-1}E^{-1}Lc_2 = L_2
+\therefore L_2 = P^{-1}E^{-1}Lc_2
 \end{aligned}
 $$
