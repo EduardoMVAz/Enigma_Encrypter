@@ -143,7 +143,7 @@ $$
 
 * The basis for decryption is utilizing the inverse of the permutation matrixes $P$ and $E$, for when a matriz is multiplied by its inverse, it becomes an indentity matrix, which when multiplied by another matrix, results in this other matrix (same as multiplying a number by 1).
 
-* Thus, the process is basically the same as encryption, but the encrypted letters are pre-multiplied by the inverse of $P$, and then by the inverse of $E$, as many times as their index, returning to their original one hot configuration, and then translated back into text before being returned to user.
+* Thus, the process is basically the same as encryption, but the encrypted letters are pre-multiplied by the inverse of $E$, as many times as their index, and then finally by the inverse of $P$, returning to their original one hot configuration, and then translated back into text before being returned to user.
 
 $$
 \begin{aligned}
